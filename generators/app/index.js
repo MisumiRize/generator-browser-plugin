@@ -45,19 +45,10 @@ module.exports = yeoman.Base.extend({
 
   writing: function () {
     const pkg = this.fs.readJSON(this.destinationPath('package.json'), {})
-    extend(pkg, {
-      devDependencies: {
-        'babel-preset-latest': '^6.16.0',
-        babelify: '^7.3.0',
-        browserify: '^13.1.0'
-      }
-    })
+    extend(pkg, this.fs.readJSON(this.templatePath('package.json')))
     this.fs.writeJSON(this.destinationPath('package.json'), pkg)
 
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
-    );
+    this.fs.copy(this.templatePath('.babelrc'), this.destinationPath('.babelrc'))
   },
 
   install: function () {

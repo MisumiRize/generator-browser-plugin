@@ -35,12 +35,6 @@
     "gulp-plumber": "^1.0.0",
     "gulp-nsp": "^2.1.0"
   },
-  "eslintConfig": {
-    "extends": "xo-space",
-    "env": {
-      "mocha": true
-    }
-  },
   "repository": "MisumiRize/generator-browser-extension",
   "scripts": {
     "prepublish": "gulp prepublish",
