@@ -49,6 +49,8 @@ module.exports = yeoman.Base.extend({
     this.fs.writeJSON(this.destinationPath('package.json'), pkg)
 
     this.fs.copy(this.templatePath('.babelrc'), this.destinationPath('.babelrc'))
+
+    this.fs.copy(this.templatePath('gulpfile.js'), this.destinationPath('gulpfile.js'))
   },
 
   install: function () {
