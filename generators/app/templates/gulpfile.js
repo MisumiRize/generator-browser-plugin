@@ -11,7 +11,7 @@ const watchify = require('watchify')
 const platforms = glob.sync('platform/*')
   .map(dir => {
     const platform = dir.replace('platform/', '')
-    return (platform == 'safari') ? 'safari.safariextension' : platform
+    return (platform == 'safari') ? '<%= pkgName %>.safariextension' : platform
   })
 
 gulp.task('copy', () => {
@@ -20,7 +20,7 @@ gulp.task('copy', () => {
     '!platform/safari',
     '!platform/safari/**/*'
   ]).pipe(gulp.dest('.tmp'))
-  gulp.src('platform/safari/**/*').pipe(gulp.dest('.tmp/safari.safariextension'))
+  gulp.src('platform/safari/**/*').pipe(gulp.dest('.tmp/<%= pkgName %>.safariextension'))
 })
 
 gulp.task('build:css', () => {

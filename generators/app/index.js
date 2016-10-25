@@ -3,25 +3,29 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 const extend = require('deep-extend')
+const askName = require('inquirer-npm-name')
+const kebabCase = require('lodash.kebabcase')
+const path = require('path')
 
 module.exports = yeoman.Base.extend({
+  initializing: function () {
+    this.props = {}
+  },
+
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
       'Welcome to the exquisite ' + chalk.red('generator-browser-extension') + ' generator!'
     ));
 
-    var prompts = [{
-      type: 'confirm',
-      name: 'someAnswer',
-      message: 'Would you like to enable this option?',
-      default: true
-    }];
-
-    return this.prompt(prompts).then(function (props) {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-    }.bind(this));
+    return askName({
+      name: 'name',
+      message: 'Your extension name',
+      default: kebabCase(path.basename(process.cwd())),
+      filter: kebabCase
+    }, this).then(function (props) {
+      this.props.name = props.name
+    }.bind(this))
   },
 
   default: function () {
@@ -33,7 +37,7 @@ module.exports = yeoman.Base.extend({
           boilerplate: false,
           coveralls: false,
           gulp: false,
-          name: 'test',
+          name: this.props.name,
           projectRoot: 'generators',
           skipInstall: this.options.skipInstall,
           readme: 'test'
@@ -50,7 +54,12 @@ module.exports = yeoman.Base.extend({
 
     this.fs.copy(this.templatePath('.babelrc'), this.destinationPath('.babelrc'))
 
-    this.fs.copy(this.templatePath('gulpfile.js'), this.destinationPath('gulpfile.js'))
+    this.fs.copyTpl(
+      this.templatePath('gulpfile.js'),
+      this.destinationPath('gulpfile.js'), {
+        pkgName: this.props.name
+      }
+    )
   },
 
   install: function () {
