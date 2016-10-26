@@ -1,13 +1,24 @@
 'use strict';
-var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 const extend = require('deep-extend')
 const askName = require('inquirer-npm-name')
 const kebabCase = require('lodash.kebabcase')
 const path = require('path')
+const yeoman = require('yeoman-generator')
 
 module.exports = yeoman.Base.extend({
+  constructor: function () {
+    yeoman.Base.apply(this, arguments)
+
+    this.option('boilerplate', {
+      type: Boolean,
+      required: false,
+      defaults: true,
+      desc: 'Include boilerplate files'
+    })
+  },
+
   initializing: function () {
     this.props = {}
   },
@@ -45,12 +56,24 @@ module.exports = yeoman.Base.extend({
       },
       {local: require('generator-node').app}
     )
+
+    if (this.options.boilerplate) {
+      this.composeWith(
+        'browser-extension:boilerplate',
+        {},
+        {local: require.resolve('../boilerplate')}
+      )
+    }
   },
 
   writing: function () {
     const pkg = this.fs.readJSON(this.destinationPath('package.json'), {})
     extend(pkg, this.fs.readJSON(this.templatePath('package.json')))
     this.fs.writeJSON(this.destinationPath('package.json'), pkg)
+
+    const config = this.fs.readJSON(this.destinationPath('.extension.json'), {})
+    extend(config, {name: this.props.name})
+    this.fs.writeJSON(this.destinationPath('.extension.json'), config)
 
     this.fs.copy(this.templatePath('.babelrc'), this.destinationPath('.babelrc'))
 
