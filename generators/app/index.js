@@ -24,6 +24,13 @@ module.exports = yeoman.Base.extend({
       defaults: true,
       desc: 'Include chromium files'
     })
+
+    this.option('safari', {
+      type: Boolean,
+      required: false,
+      defaults: true,
+      desc: 'Include safari files'
+    })
   },
 
   initializing: function () {
@@ -39,7 +46,8 @@ module.exports = yeoman.Base.extend({
 
       const prompts = [{
         name: 'name',
-        message: 'Your extension name'
+        message: 'Your extension name',
+        default: path.basename(process.cwd())
       }]
 
       return this.prompt(prompts).then(function (props) {
@@ -92,6 +100,16 @@ module.exports = yeoman.Base.extend({
         {local: require.resolve('../chromium')}
       )
     }
+
+    if (this.options.safari) {
+      this.composeWith(
+        'browser-extension:safari',
+        {
+          options: {name: this.props.name}
+        },
+        {local: require.resolve('../safari')}
+      )
+    }
   },
 
   writing: function () {
@@ -116,4 +134,4 @@ module.exports = yeoman.Base.extend({
   install: function () {
     this.installDependencies({bower: false})
   }
-});
+})

@@ -20,6 +20,7 @@
     "generator-node": "^1.12.1",
     "inquirer-npm-name": "^2.0.0",
     "lodash.kebabcase": "^4.1.1",
+    "plist": "^2.0.1",
     "yeoman-generator": "^0.23.0",
     "yosay": "^1.0.0"
   },

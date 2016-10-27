@@ -1,3 +1,4 @@
+const extend = require('deep-extend')
 const yeoman = require('yeoman-generator')
 
 module.exports = yeoman.Base.extend({
