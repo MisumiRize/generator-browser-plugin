@@ -1,12 +1,16 @@
 const browserify = require('browserify')
 const glob = require('glob')
 const gulp = require('gulp')
+const jsonEditor = require('gulp-json-editor')
 const plumber = require('gulp-plumber')
 const sass = require('gulp-sass')
 const gutil = require('gulp-util')
 const path = require('path')
 const source = require('vinyl-source-stream')
 const watchify = require('watchify')
+
+const pkg = require('./package.json')
+const config = require('./.extension.json')
 
 const platforms = glob.sync('platform/*')
   .map(dir => {
@@ -21,6 +25,17 @@ gulp.task('copy', () => {
     '!platform/safari/**/*'
   ]).pipe(gulp.dest('.tmp'))
   gulp.src('platform/safari/**/*').pipe(gulp.dest('.tmp/<%= pkgName %>.safariextension'))
+})
+
+gulp.task('build:chromium', () => {
+  gulp.src('platform/chromium/manifest.json')
+    .pipe(jsonEditor({
+      name: config.name,
+      version: pkg.version,
+      'content_scripts': config['content_scripts'],
+      'short_name': pkg.name
+    }))
+    .pipe(gulp.dest('.tmp/chromium'))
 })
 
 gulp.task('build:css', () => {

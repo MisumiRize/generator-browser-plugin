@@ -17,26 +17,46 @@ module.exports = yeoman.Base.extend({
       defaults: true,
       desc: 'Include boilerplate files'
     })
+
+    this.option('chromium', {
+      type: Boolean,
+      required: false,
+      defaults: true,
+      desc: 'Include chromium files'
+    })
   },
 
   initializing: function () {
     this.props = {}
   },
 
-  prompting: function () {
-    // Have Yeoman greet the user.
-    this.log(yosay(
-      'Welcome to the exquisite ' + chalk.red('generator-browser-extension') + ' generator!'
-    ));
+  prompting: {
+    askForName: function () {
+      // Have Yeoman greet the user.
+      this.log(yosay(
+        'Welcome to the exquisite ' + chalk.red('generator-browser-extension') + ' generator!'
+      ))
 
-    return askName({
-      name: 'name',
-      message: 'Your extension name',
-      default: kebabCase(path.basename(process.cwd())),
-      filter: kebabCase
-    }, this).then(function (props) {
-      this.props.name = props.name
-    }.bind(this))
+      const prompts = [{
+        name: 'name',
+        message: 'Your extension name'
+      }]
+
+      return this.prompt(prompts).then(function (props) {
+        this.props.name = props.name
+      }.bind(this))
+    },
+
+    askForModuleName: function () {
+      return askName({
+        name: 'name',
+        message: 'Extension short name',
+        default: kebabCase(path.basename(process.cwd())),
+        filter: kebabCase
+      }, this).then(function (props) {
+        this.props.moduleName = props.name
+      }.bind(this))
+    }
   },
 
   default: function () {
@@ -64,6 +84,14 @@ module.exports = yeoman.Base.extend({
         {local: require.resolve('../boilerplate')}
       )
     }
+
+    if (this.options.chromium) {
+      this.composeWith(
+        'browser-extension:chromium',
+        {},
+        {local: require.resolve('../chromium')}
+      )
+    }
   },
 
   writing: function () {
@@ -80,7 +108,7 @@ module.exports = yeoman.Base.extend({
     this.fs.copyTpl(
       this.templatePath('gulpfile.js'),
       this.destinationPath('gulpfile.js'), {
-        pkgName: this.props.name
+        pkgName: this.props.moduleName
       }
     )
   },

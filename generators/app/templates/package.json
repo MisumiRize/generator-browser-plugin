@@ -4,6 +4,7 @@
     "babelify": "^7.3.0",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
+    "gulp-json-editor": "^2.2.1",
     "gulp-plumber": "^1.1.0",
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.7",
