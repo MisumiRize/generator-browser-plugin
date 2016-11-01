@@ -25,6 +25,13 @@ module.exports = yeoman.Base.extend({
       desc: 'Include chromium files'
     })
 
+    this.option('firefox', {
+      type: Boolean,
+      required: false,
+      defaults: true,
+      desc: 'Include firefox files'
+    })
+
     this.option('safari', {
       type: Boolean,
       required: false,
@@ -98,6 +105,14 @@ module.exports = yeoman.Base.extend({
         'browser-extension:chromium',
         {},
         {local: require.resolve('../chromium')}
+      )
+    }
+
+    if (this.options.firefox) {
+      this.composeWith(
+        'browser-extension:firefox',
+        {},
+        {local: require.resolve('../firefox')}
       )
     }
 

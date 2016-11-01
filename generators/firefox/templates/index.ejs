@@ -1,0 +1,22 @@
+var self = require('sdk/self');
+var pageMod = require('sdk/page-mod');
+
+<% if (content && content.scripts) { %>
+  <% Object.keys(content.scripts).forEach(when => { %>
+    pageMod.PageMod(
+      {
+        include: [
+          <% content.whitelist.forEach(url => { %>
+            '<%= url %>',
+          <% }) %>
+        ],
+        contentSctiptWhen: '<%= when %>',
+        contentScriptFile: [
+          <% content.scripts[when].forEach(script => { %>
+            self.data.url('<%= script %>'),
+          <% }) %>
+        ]
+      }
+    );
+  <% }) %>
+<% } %>
