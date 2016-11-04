@@ -8,31 +8,26 @@ module.exports = yeoman.Base.extend({
 
   prompting: function () {
     const prompts = [{
-      name: 'matches',
+      name: 'whitelist',
       message: 'Matching URL (comma to split)',
       filter: (urls) => urls.split(/\s*,\s*/g)
     }]
 
     return this.prompt(prompts).then(function (props) {
-      this.props.matches = props.matches
+      this.props.whitelist = props.whitelist
     }.bind(this))
   },
 
   writing: function () {
     const config = this.fs.readJSON(this.destinationPath('.extension.json'), {})
     extend(config, {
-      'content_scripts': [
-        {
-          matches: this.props.matches,
-          js: ['contentscript-start.js'],
-          'run_at': 'document_start',
+      content: {
+        scripts: {
+          start: ['contentscript-start.js'],
+          end: ['contentscript-end.js']
         },
-        {
-          matches: this.props.matches,
-          js: ['contentscript-end.js'],
-          'run_at': 'document_end',
-        }
-      ]
+        whitelist: this.props.whitelist
+      },
     })
     this.fs.writeJSON(this.destinationPath('.extension.json'), config)
 

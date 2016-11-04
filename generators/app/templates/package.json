@@ -5,9 +5,12 @@
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
     "gulp-json-editor": "^2.2.1",
+    "gulp-plist": "^0.1.0",
     "gulp-plumber": "^1.1.0",
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.7",
+    "lodash.map": "^4.6.0",
+    "lodash.merge": "^4.6.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   }

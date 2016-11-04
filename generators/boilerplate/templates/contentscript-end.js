@@ -1,1 +1,1 @@
-console.log('Content script start.')
+console.log('Content script end.')
